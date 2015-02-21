@@ -40,45 +40,46 @@ function create_test(){
 	global $client;
 	return $client->groups()->create(array('name' => 'group+'.mt_rand(5, 150000)));
 }
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+	switch ($_REQUEST['form']){
 
-switch ($_REQUEST['form']){
-
-// Get all Groups	
-	case "listGroups":
-		print_me($client->groups()->findAll());
-		break;
+	// Get all Groups	
+		case "listGroups":
+			print_me($client->groups()->findAll());
+			break;
 	
-// Get assignable Groups	
-	case "assignableGroups":
-		print_me($client->groups()->findAll(array('assignable' => true)));
-		break;
+	// Get assignable Groups	
+		case "assignableGroups":
+			print_me($client->groups()->findAll(array('assignable' => true)));
+			break;
 	
-// Get individual user's Groups
-	case "usersGroups":
-		print_me($client->groups()->findAll(array('user_id' => $_REQUEST['id'])));
-		break;
+	// Get individual user's Groups
+		case "usersGroups":
+			print_me($client->groups()->findAll(array('user_id' => $_REQUEST['id'])));
+			break;
 	
-// Get group by user-provided ID, or create a group and return it if no ID provided
-	case "showGroup":
-		if (!empty($_REQUEST['id'])) print_me($client->groups()->find($_REQUEST));
-		else print_me($client->groups()->find(array('id' => create_test()->group->id)));
-		break;
+	// Get group by user-provided ID, or create a group and return it if no ID provided
+		case "showGroup":
+			if (!empty($_REQUEST['id'])) print_me($client->groups()->find($_REQUEST));
+			else print_me($client->groups()->find(array('id' => create_test()->group->id)));
+			break;
 	
-// Delete individual by ID provided or fail if none provided
-	case "deleteGroup":
-		if(!empty($_REQUEST['id'])) ($client->groups()->delete(array("id"=>$_REQUEST['id']))) ? print_me("Success") : print_me("There was an error. Please try again.");
-		else echo "Please enter an ID to delete";
-		break;
+	// Delete individual by ID provided or fail if none provided
+		case "deleteGroup":
+			if(!empty($_REQUEST['id'])) ($client->groups()->delete(array("id"=>$_REQUEST['id']))) ? print_me("Success") : print_me("There was an error. Please try again.");
+			else echo "Please enter an ID to delete";
+			break;
 	
-// Create a new group with user input or create example if no values provided for the required field - name	
-	case "createGroup":
-		(!empty($_REQUEST['name'])) ? print_me($client->groups()->create($_REQUEST)) : print_me(create_test());
-		break;
+	// Create a new group with user input or create example if no values provided for the required field - name	
+		case "createGroup":
+			(!empty($_REQUEST['name'])) ? print_me($client->groups()->create($_REQUEST)) : print_me(create_test());
+			break;
 		
-// update a group via user input, fail if no value provided for the required field - id
-	case "updateGroup":
-		(!empty($_REQUEST['id'])) ? print_me($client->groups()->update($_REQUEST)) :  print_me("Please add ID");
-		break;
+	// update a group via user input, fail if no value provided for the required field - id
+		case "updateGroup":
+			(!empty($_REQUEST['id'])) ? print_me($client->groups()->update($_REQUEST)) :  print_me("Please add ID");
+			break;
+	}
 }
 
 ?>
